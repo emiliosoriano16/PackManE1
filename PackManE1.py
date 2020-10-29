@@ -111,6 +111,8 @@ def move():
     goto(pacman.x + 10, pacman.y + 10)
     dot(20, 'yellow')
 
+     i = 1
+
     for point, course in ghosts:
         if valid(point + course):
             point.move(course)
@@ -121,10 +123,62 @@ def move():
                 vector(0, 5),
                 vector(0, -5),
             ]
+            
+
+
+            #course.x = plan.x
+            #course.y = plan.y
+            
+            #get pacman offset
+            poff = offset(pacman) #0-posibles índices de las casillas de la lista
+            pcol = poff%20
+            pren = math.floor(poff/20)
+            
+            #get ghost offset
+            goff = offset(point)
+            gcol = goff%20
+            gren = math.floor(goff/20)
+
+
+            if(pcol < gcol and pren < gren):
+                #elegir arriba o a la izq
+                options = [
+                    vector(-5, 0),
+                    vector(0, 5),
+                ]
+                print("Estoy yendo hacia arriba/izq")
+            
+            if(pcol > gcol and pren < gren):
+                #elegir arriba o a la der
+                options = [
+                    vector(5, 0),
+                    vector(0, 5),
+                ]
+                print("Estoy yendo hacia arriba/der")
+            
+            if(pcol < gcol and pren > gren):
+                #elegir abajo o a la izq
+                options = [
+                    vector(-5, 0),
+                    vector(0, -5),
+                ]
+                print("Estoy yendo hacia abajo/izq")
+            
+            if(pcol > gcol and pren > gren):
+                #elegir abajo o a la der
+                options = [
+                    vector(5, 0),
+                    vector(0, -5),
+                ]
+                print("Estoy yendo hacia abajo/der")
+            
+
+            #escoger alguna opción
             plan = choice(options)
+
+
             course.x = plan.x
             course.y = plan.y
-
         up()
         goto(point.x + 10, point.y + 10)
         dot(20, 'red')
@@ -135,7 +189,7 @@ def move():
         if abs(pacman - point) < 20:
             return
 
-    ontimer(move, 25)
+    ontimer(move, 100)
 
 def change(x, y):
     "Change pacman aim if valid."
